@@ -1,0 +1,37 @@
+Source: app-checker
+Section: devel
+Priority: extra
+Maintainer: Jayoun Lee <airjany@samsung.com>, Sewook Park <sewook7.park@samsung.com>, Jaeho Lee <jaeho81.lee@samsung.com>
+Build-Depends: debhelper (>= 5), dlog-dev, libglib2.0-dev
+Standards-Version: 0.1.0 
+
+Package: libapp-checker-dev
+Section: libs
+Architecture: any
+Depends: libapp-checker-0 (= ${Source-Version})
+Description: libapp-checker dev package
+
+Package: libapp-checker-0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: libapp-checker-0 package
+
+Package: libapp-checker-server-dev
+Section: libs
+Architecture: any
+Depends: libapp-checker-server-0 (= ${Source-Version})
+Description: libapp-checker dev package
+
+Package: libapp-checker-server-0
+Section: devel
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: libapp-checker server package
+
+Package: app-checker-dbg
+Section: debug
+Architecture: any
+Depends: libapp-checker-0, libapp-checker-server-0, ${shlibs:Depends}, ${misc:Depends}
+Description: app-checker dbg package 
+

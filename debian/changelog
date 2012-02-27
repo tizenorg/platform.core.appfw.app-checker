@@ -1,0 +1,7 @@
+app-checker (0.0.5-1) unstable; urgency=low
+
+  * Initial release
+  * Git: pkgs/a/app-checker
+  * Tag: app-check_0.0.5-1
+
+ -- Jaeho Lee <jaeho81.lee@samsung.com>  Wed, 07 Dec 2011 13:41:34 +0900

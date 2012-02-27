@@ -1,0 +1,2 @@
+@PREFIX@/include/app-checker/app-checker-server.h
+@PREFIX@/lib/pkgconfig/app-checker-server.pc

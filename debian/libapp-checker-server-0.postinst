@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ "${USER}" = "root" ]
+then
+	chown root:root /usr/lib/libapp-checker-server.so.0.1.0
+fi
+
+chmod 644 /usr/lib/libapp-checker-server.so.0.1.0
+
+mkdir -p /usr/lib/ac-plugins
+
+#chmod 1777 /opt/share/miregex	# Set directory to be writable for other accounts

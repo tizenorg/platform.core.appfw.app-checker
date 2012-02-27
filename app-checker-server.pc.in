@@ -1,0 +1,13 @@
+# Package Information for pkg-config
+
+prefix=/usr
+exec_prefix=@EXEC_PREFIX@
+libdir=@LIBDIR@
+includedir=@INCLUDEDIR@
+
+Name: libapp-checker-server
+Description: application checker server
+Version: @VERSION@
+Requires: 
+Libs: -L${libdir} -lapp-checker-server
+Cflags: -I${includedir}
