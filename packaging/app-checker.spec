@@ -1,9 +1,9 @@
 Name:	    app-checker
 Summary:    App Checker
-Version:    0.0.2
+Version:    0.0.5
 Release:    1
 Group:      System/Libraries
-License:    SAMSUNG
+License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
 
 Requires(post): /sbin/ldconfig
@@ -51,7 +51,10 @@ libapp-checker server (developement files)
 
 %build
 
-CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" cmake . -DCMAKE_INSTALL_PREFIX=/usr
+CFLAGS+=" -fvisibility=hidden -fpic"
+LDFLAGS+=" -Wl,--rpath=/usr/lib -Wl,--as-needed"
+
+cmake . -DCMAKE_INSTALL_PREFIX=/usr
 
 make %{?jobs:-j%jobs}
 
@@ -62,28 +65,28 @@ rm -rf %{buildroot}
 
 %post -p /sbin/ldconfig
 
+%post server -p /sbin/ldconfig
+
 %postun -p /sbin/ldconfig
+
+%postun server -p /sbin/ldconfig
 
 
 %files
-%defattr(-,root,root,-)
-/usr/bin/ac_test
+#/usr/bin/ac_test
 /usr/lib/libapp-checker.so.0
-/usr/lib/libapp-checker.so.0.1.0
+%attr(644, root, root) /usr/lib/libapp-checker.so.0.1.0
 
 %files devel
-%defattr(-,root,root,-)
 /usr/lib/libapp-checker.so
 /usr/lib/pkgconfig/app-checker.pc
 /usr/include/app-checker/app-checker.h
 
 %files server
-%defattr(-,root,root,-)
 /usr/lib/libapp-checker-server.so.0
-/usr/lib/libapp-checker-server.so.0.1.0
+%attr(644, root, root) /usr/lib/libapp-checker-server.so.0.1.0
 
 %files server-devel
-%defattr(-,root,root,-)
 /usr/lib/libapp-checker-server.so
 /usr/lib/pkgconfig/app-checker-server.pc
 /usr/include/app-checker/app-checker-server.h
