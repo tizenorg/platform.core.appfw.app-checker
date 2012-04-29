@@ -50,7 +50,6 @@ static inline void __set_sock_option(int fd, int cli)
 int _create_server_sock()
 {
 	struct sockaddr_un saddr;
-	struct sockaddr_un p_saddr;
 	int fd;
 
 	fd = socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);

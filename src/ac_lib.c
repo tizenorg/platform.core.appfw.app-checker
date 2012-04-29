@@ -36,16 +36,16 @@
 static int app_send_cmd(const char *pkg_name, const char *pkg_type, int pid, int cmd)
 {
 	int ret = -1;
-	char *data;
+	unsigned char *data;
 	struct ac_data ad;
 
 	strncpy(ad.pkg_name, pkg_name, MAX_PACKAGE_STR_SIZE);
 	strncpy(ad.pkg_type, pkg_type, MAX_PACKAGE_TYPE_SIZE);
 	ad.pid = pid;
 
-	data = g_base64_encode(&ad, sizeof(ad));
-	
-	if ((ret = _app_send_raw(cmd, data, strnlen(data, AC_SOCK_MAXBUFF - 8))) < 0) {
+	data = (unsigned char *)g_base64_encode((const guchar *)&ad, sizeof(ad));
+
+	if ((ret = _app_send_raw(cmd, data, (int)strnlen((char *)data, AC_SOCK_MAXBUFF - 8))) < 0) {
 		switch (ret) {
 		case -EINVAL:
 			ret = AC_R_EINVAL;

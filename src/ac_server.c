@@ -162,7 +162,7 @@ static gboolean __ac_handler(gpointer data)
 		return FALSE;
 	}
 
-	ad = (struct ac_data *)g_base64_decode(pkt->data, &size);
+	ad = (struct ac_data *)g_base64_decode((const gchar*)pkt->data, (gsize *)&size);
 
 	_D("cmd : %d, pkgname : %s, pkgtype : %s", pkt->cmd, ad->pkg_name, ad->pkg_type);
 
@@ -339,7 +339,7 @@ int __initialize()
 				__pkt_type_list_free();
 				return AC_R_ERROR;
 			}
-			memset(type_t, 0, sizeof(ac_so_list_t));
+			memset(so_t, 0, sizeof(ac_so_list_t));
 			so_t->so_name = strdup(sub_dentry->d_name);
 			so_t->ac_check = dlsym(handle, "check_launch_privilege");
 			so_t->ac_register = dlsym(handle, "check_register_privilege");
