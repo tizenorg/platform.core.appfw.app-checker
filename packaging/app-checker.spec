@@ -5,6 +5,7 @@ Release:    2
 Group:      System/Libraries
 License:    Apache License, Version 2.0
 Source0:    %{name}-%{version}.tar.gz
+Source1001: packaging/app-checker.manifest 
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -50,6 +51,7 @@ libapp-checker server (developement files)
 
 
 %build
+cp %{SOURCE1001} .
 
 CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" cmake . -DCMAKE_INSTALL_PREFIX=/usr
 
@@ -69,22 +71,26 @@ mkdir -p /usr/lib/ac-plugins
 
 
 %files
+%manifest app-checker.manifest
 %defattr(-,root,root,-)
 /usr/lib/libapp-checker.so.0
 /usr/lib/libapp-checker.so.0.1.0
 
 %files devel
+%manifest app-checker.manifest
 %defattr(-,root,root,-)
 /usr/lib/libapp-checker.so
 /usr/lib/pkgconfig/app-checker.pc
 /usr/include/app-checker/app-checker.h
 
 %files server
+%manifest app-checker.manifest
 %defattr(-,root,root,-)
 /usr/lib/libapp-checker-server.so.0
 /usr/lib/libapp-checker-server.so.0.1.0
 
 %files server-devel
+%manifest app-checker.manifest
 %defattr(-,root,root,-)
 /usr/lib/libapp-checker-server.so
 /usr/lib/pkgconfig/app-checker-server.pc
