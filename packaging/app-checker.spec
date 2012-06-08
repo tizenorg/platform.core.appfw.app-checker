@@ -8,6 +8,7 @@ Source0:    %{name}-%{version}.tar.gz
 Source1001: packaging/app-checker.manifest 
 
 Requires(post): /sbin/ldconfig
+Requires(post): /bin/mkdir
 Requires(postun): /sbin/ldconfig
 
 
