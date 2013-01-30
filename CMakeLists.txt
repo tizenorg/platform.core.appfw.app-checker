@@ -91,13 +91,13 @@ CONFIGURE_FILE(app-checker-server.pc.in app-checker-server.pc @ONLY)
 
 MESSAGE("LIBDIR ${LIB_INSTALL_DIR}")
 ### Install ###
-INSTALL(TARGETS app-checker DESTINATION lib COMPONENT RuntimeLibraries)
-INSTALL(TARGETS ${DAEMON_NAME} DESTINATION lib COMPONENT RuntimeLibraries)
+INSTALL(TARGETS app-checker DESTINATION ${LIB_INSTALL_DIR} COMPONENT RuntimeLibraries)
+INSTALL(TARGETS ${DAEMON_NAME} DESTINATION ${LIB_INSTALL_DIR} COMPONENT RuntimeLibraries)
 
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/app-checker.h DESTINATION include/app-checker)
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/app-checker.pc DESTINATION lib/pkgconfig)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/app-checker.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/app-checker-server.h DESTINATION include/app-checker)
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/app-checker-server.pc DESTINATION lib/pkgconfig)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/app-checker-server.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 
 
