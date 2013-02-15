@@ -1,7 +1,64 @@
-app-checker (0.0.5-1) unstable; urgency=low
+app-checker (0.0.8) unstable; urgency=low
 
-  * Initial release
-  * Git: pkgs/a/app-checker
-  * Tag: app-check_0.0.5-1
+  * Fixed compile warnings
+  * Git: slp/pkgs/a/app-checker
+  * Tag: app-checker_0.0.8
 
- -- Jaeho Lee <jaeho81.lee@samsung.com>  Wed, 07 Dec 2011 13:41:34 +0900
+ -- Jaeho Lee <jaeho81.lee@samsung.com>  Tue, 20 Mar 2012 13:42:36 +0900
+
+app-checker (0.0.7) unstable; urgency=low
+
+  * Fix bug (memset)
+  * Git: slp/pkgs/a/app-checker
+  * Tag: app-checker_0.0.7
+
+ -- Jaeho Lee <jaeho81.lee@samsung.com>  Fri, 02 Mar 2012 18:09:01 +0900
+
+app-checker (0.0.6) unstable; urgency=low
+
+  * Added TC
+  * Git: slp/pkgs/a/app-checker
+  * Tag: app-checker_0.0.6
+
+ -- Jaeho Lee <jaeho81.lee@samsung.com>  Mon, 19 Dec 2011 19:06:25 +0900
+
+app-checker (0.0.5) unstable; urgency=low
+
+  * Changed boilerplate
+  * Git: 165.213.180.234:slp/pkgs/a/app-checker
+  * Tag: app-checker_0.0.5
+
+ -- Jaeho Lee <jaeho81.lee@samsung.com>  Mon, 05 Dec 2011 16:35:25 +0900
+
+app-checker (0.0.4) unstable; urgency=low
+
+  * Fix svace bugs
+  * Git: 165.213.180.234:slp/pkgs/a/app-checker
+  * Tag: app-checker_0.0.4 
+
+ -- Jaeho Lee <jaeho81.lee@samsung.com>  Tue, 25 Oct 2011 19:04:37 +0900
+
+app-checker (0.0.3) unstable; urgency=low
+
+  * Fix memory leak
+  * Git: 165.213.180.234:slp/pkgs/a/app-checker
+  * Tag: app-checker_0.0.3 
+
+ -- Jaeho Lee <jaeho81.lee@samsung.com>  Tue, 25 Oct 2011 16:36:06 +0900
+
+app-checker (0.0.2) unstable; urgency=low
+
+  * add plugin directory
+  * Git: 165.213.180.234:slp/pkgs/a/app-checker
+  * Tag: app-checker_0.0.2 
+
+ -- root <jaeho81.lee@samsung.com>  Mon, 17 Oct 2011 19:09:13 +0900
+
+app-checker (0.0.1) unstable; urgency=low
+
+  * initial update
+  * Git: 165.213.180.234:slp/pkgs/a/app-checker
+  * Tag: app-checker_0.0.1
+
+ -- Jaeho Lee <jaeho81.lee@samsung.com>  Tue, 19 Jul 2011 10:23:24 +0900
+

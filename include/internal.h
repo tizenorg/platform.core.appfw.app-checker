@@ -28,7 +28,7 @@
 #include <dlog.h>
 
 #undef LOG_TAG
-#define LOG_TAG "APP-CHECKER"
+#define LOG_TAG "APP_CHECKER"
 
 #define MAX_PACKAGE_STR_SIZE 512
 #define MAX_PACKAGE_TYPE_SIZE 128
@@ -39,8 +39,8 @@ struct ac_data {
 	int pid;
 };
 
-#define _E(fmt, arg...) LOGE("[%s,%d] "fmt,__FUNCTION__,__LINE__,##arg)
-#define _D(fmt, arg...) LOGD("[%s,%d] "fmt,__FUNCTION__,__LINE__,##arg)
+#define _E(fmt, arg...) LOGE(fmt,##arg)
+#define _D(fmt, arg...) LOGD(fmt,##arg)
 
 #define retvm_if(expr, val, fmt, arg...) do { \
 	if(expr) { \

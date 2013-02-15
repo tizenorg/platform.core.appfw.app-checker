@@ -162,7 +162,7 @@ static gboolean __ac_handler(gpointer data)
 		return FALSE;
 	}
 
-	ad = (struct ac_data *)g_base64_decode(pkt->data, &size);
+	ad = (struct ac_data *)g_base64_decode((const gchar*)pkt->data, (gsize *)&size);
 
 	_D("cmd : %d, pkgname : %s, pkgtype : %s", pkt->cmd, ad->pkg_name, ad->pkg_type);
 
@@ -289,7 +289,7 @@ int __initialize()
 
 	DIR *dp;
 	struct dirent *dentry;
-	DIR *sub_dp;
+	DIR *sub_dp = NULL;
 	struct dirent *sub_dentry;
 	char buf[MAX_LOCAL_BUFSZ];
 	char buf2[MAX_LOCAL_BUFSZ];
@@ -314,6 +314,7 @@ int __initialize()
 		type_t = malloc(sizeof(ac_type_list_t));
 		if(type_t == NULL) {
 			__pkt_type_list_free();
+			closedir(dp);
 			return AC_R_ERROR;
 		}
 		memset(type_t, 0, sizeof(ac_type_list_t));
@@ -323,6 +324,11 @@ int __initialize()
 		pkg_type_list = g_slist_append(pkg_type_list, (void *)type_t);
 		
 		sub_dp = opendir(buf);
+		if (sub_dp == NULL) {
+			__pkt_type_list_free();
+			closedir(dp);
+			return AC_R_ERROR;
+		}
 		
 		while ((sub_dentry = readdir(sub_dp)) != NULL) {
 			
@@ -337,9 +343,13 @@ int __initialize()
 			so_t = malloc(sizeof(ac_so_list_t));
 			if(so_t == NULL) {
 				__pkt_type_list_free();
+				dlclose(handle);
+				handle = NULL;
+				closedir(sub_dp);
+				closedir(dp);
 				return AC_R_ERROR;
 			}
-			memset(type_t, 0, sizeof(ac_so_list_t));
+			memset(so_t, 0, sizeof(ac_so_list_t));
 			so_t->so_name = strdup(sub_dentry->d_name);
 			so_t->ac_check = dlsym(handle, "check_launch_privilege");
 			so_t->ac_register = dlsym(handle, "check_register_privilege");
@@ -348,12 +358,14 @@ int __initialize()
 			type_t->so_list = g_slist_append(type_t->so_list, (void *)so_t);
 			handle = NULL;
 		}
+		closedir(sub_dp);
 	}
+	closedir(dp);
 
 	return AC_R_OK;
 }
 
-SLPAPI int ac_server_initailize()
+SLPAPI int ac_server_initialize()
 {
 	int ret = AC_R_OK;
 	
@@ -361,4 +373,13 @@ SLPAPI int ac_server_initailize()
 	
 	return ret;
 }
+
+SLPAPI int ac_server_check_launch_privilege(const char *pkg_name, const char *pkg_type, int pid)
+{
+	int ret = -1;
+	ret = __check_launch_privilege(pkg_name, pkg_type, pid);
+
+	return ret;
+}
+
 
