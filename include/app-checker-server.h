@@ -32,7 +32,8 @@ typedef enum _ac_return_val {
 	AC_R_OK = 0			/**< General success */
 }ac_return_val;
 
-int ac_server_initailize();
+int ac_server_initialize();
+int ac_server_check_launch_privilege(const char *pkg_name, const char *pkg_type, int pid);
 
 #ifdef __cpulusplus
 	}

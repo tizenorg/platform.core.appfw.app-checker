@@ -36,7 +36,7 @@ typedef enum _ac_return_val {
 	AC_R_OK = 0			/**< General success */
 }ac_return_val;
 
-int ac_check_launch_privilege(const char *pkg_name, const char *pkg_type, int pid);
+int ac_check_launch_privilege(const char *appid, const char *pkg_type, int pid);
 
 int ac_register_launch_privilege(const char *pkg_name, const char *pkg_type);
 

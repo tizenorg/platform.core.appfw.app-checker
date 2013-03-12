@@ -1,9 +1,9 @@
 Name:	    app-checker
 Summary:    App Checker
-Version:    0.0.2
+Version:    0.0.16
 Release:    1
 Group:      System/Libraries
-License:    SAMSUNG
+License:    Apache License, Version 2.0
 Source0:    %{name}-%{version}.tar.gz
 
 Requires(post): /sbin/ldconfig
@@ -60,14 +60,17 @@ rm -rf %{buildroot}
 %make_install
 
 
-%post -p /sbin/ldconfig
+%post
+
+/sbin/ldconfig
+mkdir -p /usr/lib/ac-plugins
 
 %postun -p /sbin/ldconfig
 
 
 %files
+%manifest app-checker.manifest
 %defattr(-,root,root,-)
-/usr/bin/ac_test
 /usr/lib/libapp-checker.so.0
 /usr/lib/libapp-checker.so.0.1.0
 
@@ -78,6 +81,7 @@ rm -rf %{buildroot}
 /usr/include/app-checker/app-checker.h
 
 %files server
+%manifest app-checker.manifest
 %defattr(-,root,root,-)
 /usr/lib/libapp-checker-server.so.0
 /usr/lib/libapp-checker-server.so.0.1.0

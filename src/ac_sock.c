@@ -50,7 +50,6 @@ static inline void __set_sock_option(int fd, int cli)
 int _create_server_sock()
 {
 	struct sockaddr_un saddr;
-	struct sockaddr_un p_saddr;
 	int fd;
 
 	fd = socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
@@ -68,19 +67,21 @@ int _create_server_sock()
 		}
 	}
 
-	bzero(&saddr, sizeof(saddr));
+	memset(&saddr, 0, sizeof(saddr));
 	saddr.sun_family = AF_UNIX;
 	snprintf(saddr.sun_path, UNIX_PATH_MAX, "%s",AC_SOCK_NAME);
 	unlink(saddr.sun_path);
 	
 	if (bind(fd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0) {
 		_E("bind error");
+		close(fd);
 		return -1;
 	}
 
 	if (chmod(saddr.sun_path, (S_IRWXU | S_IRWXG | S_IRWXO)) < 0) {
 		/* Flawfinder: ignore*/
 		_E("failed to change the socket permission");
+		close(fd);
 		return -1;
 	}
 
@@ -88,6 +89,7 @@ int _create_server_sock()
 
 	if (listen(fd, 10) == -1) {
 		_E("listen error");
+		close(fd);
 		return -1;
 	}	
 
