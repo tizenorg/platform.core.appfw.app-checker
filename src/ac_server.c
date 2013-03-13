@@ -35,7 +35,7 @@
 #include "ac_sock.h"
 #include "internal.h"
 
-#define PLUGINS_PREFIX "/usr/lib/ac-plugins"
+#define PLUGINS_PREFIX LIBPREFIX "/ac-plugins"
 #define MAX_LOCAL_BUFSZ 	512
 
 #ifndef SLPAPI
