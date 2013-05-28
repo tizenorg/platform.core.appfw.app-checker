@@ -1,0 +1,8 @@
+* Tue May 28 2013 Xavier Roche <xavrock.os@gmail.com> accepted/tizen/20130520.100859@85de5b3
+- Fix x86_64 build-install compliance
+- fixed build on x86_64
+- Fix x86_64 build
+- sync
+- Tizen 2.1 base
+- tizen beta release
+
