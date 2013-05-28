@@ -52,7 +52,7 @@ make %{?jobs:-j%jobs}
 %install
 rm -rf %{buildroot}
 %make_install
-mkdir -p %{buildroot}/usr/lib/ac-plugins
+mkdir -p %{buildroot}%{_libdir}/ac-plugins
 
 
 %post -p /sbin/ldconfig
@@ -65,7 +65,7 @@ mkdir -p %{buildroot}/usr/lib/ac-plugins
 %defattr(-,root,root,-)
 %{_libdir}/libapp-checker.so.0
 %{_libdir}/libapp-checker.so.0.1.0
-/usr/lib/ac-plugins
+%{_libdir}/ac-plugins
 
 %files devel
 %defattr(-,root,root,-)
