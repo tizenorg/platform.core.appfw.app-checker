@@ -1,0 +1,8 @@
+Change-Id: I85de5b33f67161d3511066ec9981586969bbcc04
+Code-Review+2: Anas Nashif
+Verified+1: Anas Nashif
+Submitted-by: Anas Nashif
+Submitted-at: Thu, 30 May 2013 05:00:56 -0700
+Reviewed-on: https://review.tizen.org/gerrit/3692
+Project: platform/core/appfw/app-checker
+Branch: refs/heads/tizen

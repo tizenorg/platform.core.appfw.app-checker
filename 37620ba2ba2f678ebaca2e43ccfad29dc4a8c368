@@ -1,0 +1,8 @@
+Change-Id: I37620ba2ba2f678ebaca2e43ccfad29dc4a8c368
+Code-Review+2: Anas Nashif
+Verified+1: Xavier Roche <xavier.roche@eurogiciel.fr>
+Submitted-by: Anas Nashif
+Submitted-at: Thu, 30 May 2013 05:00:33 -0700
+Reviewed-on: https://review.tizen.org/gerrit/3764
+Project: platform/core/appfw/app-checker
+Branch: refs/heads/tizen
