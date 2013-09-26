@@ -54,6 +54,8 @@ rm -rf %{buildroot}
 %make_install
 mkdir -p %{buildroot}/usr/lib/ac-plugins
 
+mkdir -p %{buildroot}/usr/share/license
+cp LICENSE %{buildroot}/usr/share/license/%{name}
 
 %post -p /sbin/ldconfig
 
@@ -66,6 +68,8 @@ mkdir -p %{buildroot}/usr/lib/ac-plugins
 %{_libdir}/libapp-checker.so.0
 %{_libdir}/libapp-checker.so.0.1.0
 /usr/lib/ac-plugins
+/usr/share/license/%{name}
+
 
 %files devel
 %defattr(-,root,root,-)
