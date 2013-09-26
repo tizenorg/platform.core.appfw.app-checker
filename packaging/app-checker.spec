@@ -55,6 +55,11 @@ rm -rf %{buildroot}
 %make_install
 mkdir -p %{buildroot}%{_libdir}/ac-plugins
 
+mkdir -p %{buildroot}/usr/share/license
+cp LICENSE %{buildroot}/usr/share/license/%{name}
+cp LICENSE %{buildroot}/usr/share/license/%{name}-devel
+cp LICENSE %{buildroot}/usr/share/license/%{name}-server
+cp LICENSE %{buildroot}/usr/share/license/%{name}-server-devel
 
 %post -p /sbin/ldconfig
 
@@ -67,6 +72,7 @@ mkdir -p %{buildroot}%{_libdir}/ac-plugins
 %{_libdir}/libapp-checker.so.0
 %{_libdir}/libapp-checker.so.0.1.0
 %{_libdir}/ac-plugins
+/usr/share/license/%{name}
 
 %files devel
 %manifest %{name}.manifest
@@ -74,12 +80,14 @@ mkdir -p %{buildroot}%{_libdir}/ac-plugins
 %{_libdir}/libapp-checker.so
 %{_libdir}/pkgconfig/app-checker.pc
 %{_includedir}/app-checker/app-checker.h
+/usr/share/license/%{name}-devel
 
 %files server
 %manifest %{name}.manifest
 %defattr(-,root,root,-)
 %{_libdir}/libapp-checker-server.so.0
 %{_libdir}/libapp-checker-server.so.0.1.0
+/usr/share/license/%{name}-server
 
 %files server-devel
 %manifest %{name}.manifest
@@ -87,4 +95,5 @@ mkdir -p %{buildroot}%{_libdir}/ac-plugins
 %{_libdir}/libapp-checker-server.so
 %{_libdir}/pkgconfig/app-checker-server.pc
 %{_includedir}/app-checker/app-checker-server.h
+/usr/share/license/%{name}-server-devel
 
