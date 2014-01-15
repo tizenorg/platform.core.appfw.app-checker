@@ -3,7 +3,7 @@ Summary:    App Checker
 Version:    0.0.16
 Release:    1
 Group:      System/Libraries
-License:    Apache License, Version 2.0
+License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
 BuildRequires: cmake
 BuildRequires: pkgconfig(dlog)
@@ -76,16 +76,19 @@ cp LICENSE %{buildroot}/usr/share/license/%{name}
 %{_libdir}/libapp-checker.so
 %{_libdir}/pkgconfig/app-checker.pc
 /usr/include/app-checker/app-checker.h
+/usr/share/license/%{name}
 
 %files server
 %manifest app-checker.manifest
 %defattr(-,root,root,-)
 %{_libdir}/libapp-checker-server.so.0
 %{_libdir}/libapp-checker-server.so.0.1.0
+/usr/share/license/%{name}
 
 %files server-devel
 %defattr(-,root,root,-)
 %{_libdir}/libapp-checker-server.so
 %{_libdir}/pkgconfig/app-checker-server.pc
 /usr/include/app-checker/app-checker-server.h
+/usr/share/license/%{name}
 
