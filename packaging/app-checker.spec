@@ -56,6 +56,9 @@ mkdir -p %{buildroot}/usr/lib/ac-plugins
 
 mkdir -p %{buildroot}/usr/share/license
 cp LICENSE %{buildroot}/usr/share/license/%{name}
+cp LICENSE %{buildroot}/usr/share/license/%{name}-devel
+cp LICENSE %{buildroot}/usr/share/license/%{name}-server
+cp LICENSE %{buildroot}/usr/share/license/%{name}-server-devel
 
 %post -p /sbin/ldconfig
 
@@ -76,19 +79,19 @@ cp LICENSE %{buildroot}/usr/share/license/%{name}
 %{_libdir}/libapp-checker.so
 %{_libdir}/pkgconfig/app-checker.pc
 /usr/include/app-checker/app-checker.h
-/usr/share/license/%{name}
+/usr/share/license/%{name}-devel
 
 %files server
 %manifest app-checker.manifest
 %defattr(-,root,root,-)
 %{_libdir}/libapp-checker-server.so.0
 %{_libdir}/libapp-checker-server.so.0.1.0
-/usr/share/license/%{name}
+/usr/share/license/%{name}-server
 
 %files server-devel
 %defattr(-,root,root,-)
 %{_libdir}/libapp-checker-server.so
 %{_libdir}/pkgconfig/app-checker-server.pc
 /usr/include/app-checker/app-checker-server.h
-/usr/share/license/%{name}
+/usr/share/license/%{name}-server-devel
 
