@@ -1,11 +1,11 @@
-Name:	    app-checker
+Name:       app-checker
 Summary:    App Checker
 Version:    0.0.16
-Release:    1
+Release:    0
 Group:      System/Libraries
-License:    Apache License, Version 2.0
+License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
-Source1001: 	app-checker.manifest
+Source1001: app-checker.manifest
 BuildRequires: cmake
 BuildRequires: pkgconfig(dlog)
 BuildRequires: pkgconfig(glib-2.0)
@@ -20,7 +20,7 @@ Group:      Development/Libraries
 Requires:   %{name} = %{version}-%{release}
 
 %description devel
-libapp-checker (developement files)
+libapp-checker (development files)
 
 %package server
 Summary:    App Checker Server
@@ -36,8 +36,7 @@ Group:      System/Libraries
 Requires:   %{name}-server = %{version}-%{release}
 
 %description server-devel
-libapp-checker server (developement files)
-
+libapp-checker server (development files)
 
 
 %prep
@@ -47,7 +46,7 @@ cp %{SOURCE1001} .
 
 %build
 
-%cmake . 
+%cmake .
 
 make %{?jobs:-j%jobs}
 
@@ -74,7 +73,7 @@ mkdir -p %{buildroot}%{_libdir}/ac-plugins
 %defattr(-,root,root,-)
 %{_libdir}/libapp-checker.so
 %{_libdir}/pkgconfig/app-checker.pc
-/usr/include/app-checker/app-checker.h
+%{_includedir}/app-checker/app-checker.h
 
 %files server
 %manifest %{name}.manifest
@@ -87,5 +86,5 @@ mkdir -p %{buildroot}%{_libdir}/ac-plugins
 %defattr(-,root,root,-)
 %{_libdir}/libapp-checker-server.so
 %{_libdir}/pkgconfig/app-checker-server.pc
-/usr/include/app-checker/app-checker-server.h
+%{_includedir}/app-checker/app-checker-server.h
 

@@ -55,7 +55,6 @@ IF("${ARCH}" STREQUAL "arm")
 ENDIF("${ARCH}" STREQUAL "arm")
 
 ADD_DEFINITIONS("-DPREFIX=\"${CMAKE_INSTALL_PREFIX}\"")
-ADD_DEFINITIONS("-DRW_DATA_PREFIX=\"/opt/share\"")
 ADD_DEFINITIONS("-DLIBPREFIX=\"${LIB_INSTALL_DIR}\"")
 # Linker flags
 SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed")
@@ -76,9 +75,9 @@ SET_TARGET_PROPERTIES(app-checker PROPERTIES VERSION ${VERSION})
 # 
 SET(DAEMON_NAME "app-checker-server")
 add_library(${DAEMON_NAME} SHARED
-        src/ac_server.c
+		src/ac_server.c
 	src/ac_sock.c
-        )
+		)
 
 target_link_libraries(${DAEMON_NAME} ${pkgs_LDFLAGS} ${LIB_DL})
 SET_TARGET_PROPERTIES(${DAEMON_NAME} PROPERTIES SOVERSION ${VERSION_MAJOR})
