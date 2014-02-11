@@ -13,7 +13,7 @@ SET(INCLUDEDIR "\${prefix}/include/app-checker")
 
 # Build type : Release
 IF("${CMAKE_BUILD_TYPE}" STREQUAL "")
-	SET(CMAKE_BUILD_TYPE "Release")
+    SET(CMAKE_BUILD_TYPE "Release")
 ENDIF()
 MESSAGE("Build type: ${CMAKE_BUILD_TYPE}")
 
@@ -27,11 +27,11 @@ pkg_check_modules(libpkgs REQUIRED dlog glib-2.0)
 FIND_LIBRARY(LIB_DL dl)
 
 FOREACH(flag ${libpkgs_CFLAGS})
-	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
+    SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
 ENDFOREACH(flag)
 
 FOREACH(flag ${pkgs_CFLAGS})
-	SET(TEST_CFLAGS "${TEST_CFLAGS} ${flag}")
+    SET(TEST_CFLAGS "${TEST_CFLAGS} ${flag}")
 ENDFOREACH(flag)
 
 # Compiler flags
@@ -50,12 +50,12 @@ SET(CMAKE_SKIP_BUILD_RPATH true)
 FIND_PROGRAM(UNAME NAMES uname)
 EXEC_PROGRAM("${UNAME}" ARGS "-m" OUTPUT_VARIABLE "ARCH")
 IF("${ARCH}" STREQUAL "arm")
-	ADD_DEFINITIONS("-DTARGET")
-	MESSAGE("add -DTARGET")
+    ADD_DEFINITIONS("-DTARGET")
+    MESSAGE("add -DTARGET")
 ENDIF("${ARCH}" STREQUAL "arm")
 
 ADD_DEFINITIONS("-DPREFIX=\"${CMAKE_INSTALL_PREFIX}\"")
-ADD_DEFINITIONS("-DRW_DATA_PREFIX=\"/opt/share\"")
+ADD_DEFINITIONS("-DRW_DATA_PREFIX=\"${TZ_SYS_SHARE}\"")
 ADD_DEFINITIONS("-DLIBPREFIX=\"${LIB_INSTALL_DIR}\"")
 # Linker flags
 SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed")
@@ -66,9 +66,9 @@ SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed")
 
 # app-checker
 add_library(app-checker SHARED
-		src/ac_lib.c
-		src/ac_sock.c
-		)
+        src/ac_lib.c
+        src/ac_sock.c
+        )
 target_link_libraries(app-checker ${libpkgs_LDFLAGS})
 SET_TARGET_PROPERTIES(app-checker PROPERTIES SOVERSION ${VERSION_MAJOR})
 SET_TARGET_PROPERTIES(app-checker PROPERTIES VERSION ${VERSION})
@@ -77,7 +77,7 @@ SET_TARGET_PROPERTIES(app-checker PROPERTIES VERSION ${VERSION})
 SET(DAEMON_NAME "app-checker-server")
 add_library(${DAEMON_NAME} SHARED
         src/ac_server.c
-	src/ac_sock.c
+    src/ac_sock.c
         )
 
 target_link_libraries(${DAEMON_NAME} ${pkgs_LDFLAGS} ${LIB_DL})
