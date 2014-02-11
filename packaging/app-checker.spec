@@ -1,14 +1,15 @@
-Name:	    app-checker
+Name:       app-checker
 Summary:    App Checker
 Version:    0.0.16
 Release:    1
 Group:      System/Libraries
-License:    Apache License, Version 2.0
+License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
-Source1001: 	app-checker.manifest
+Source1001: app-checker.manifest
 BuildRequires: cmake
 BuildRequires: pkgconfig(dlog)
 BuildRequires: pkgconfig(glib-2.0)
+BuildRequires: pkgconfig(libtzplatform-config)
 
 
 %description
@@ -20,7 +21,7 @@ Group:      Development/Libraries
 Requires:   %{name} = %{version}-%{release}
 
 %description devel
-libapp-checker (developement files)
+libapp-checker (development files)
 
 %package server
 Summary:    App Checker Server
@@ -36,8 +37,7 @@ Group:      System/Libraries
 Requires:   %{name}-server = %{version}-%{release}
 
 %description server-devel
-libapp-checker server (developement files)
-
+libapp-checker server (development files)
 
 
 %prep
@@ -47,7 +47,7 @@ cp %{SOURCE1001} .
 
 %build
 
-%cmake . 
+%cmake . -DCMAKE_SYS_SHARE=%{TZ_SYS_SHARE}
 
 make %{?jobs:-j%jobs}
 
