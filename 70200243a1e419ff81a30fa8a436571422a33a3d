@@ -17,6 +17,14 @@ Branch: refs/heads/tizen
 Code-Review+2: Semun Lee <sm79.lee@samsung.com>
 Verified+1: Semun Lee <sm79.lee@samsung.com>
 Submitted-by: Semun Lee <sm79.lee@samsung.com>
+Submitted-at: Wed, 12 Nov 2014 16:35:31 -0700
+Reviewed-on: https://review.tizen.org/gerrit/28725
+Project: platform/core/appfw/app-checker
+Branch: refs/heads/tizen
+
+Code-Review+2: Semun Lee <sm79.lee@samsung.com>
+Verified+1: Semun Lee <sm79.lee@samsung.com>
+Submitted-by: Semun Lee <sm79.lee@samsung.com>
 Submitted-at: Wed, 12 Nov 2014 15:35:31 -0800
 Reviewed-on: https://review.tizen.org/gerrit/28725
 Project: platform/core/appfw/app-checker
