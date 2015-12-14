@@ -31,12 +31,12 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 
-#include <app-checker.h>
+#include "app-checker.h"
 #include "ac_sock.h"
 #include "internal.h"
 
 #define PLUGINS_PREFIX LIBPREFIX "/ac-plugins"
-#define MAX_LOCAL_BUFSZ 	512
+#define MAX_LOCAL_BUFSZ 512
 
 #ifndef SLPAPI
 #define SLPAPI __attribute__ ((visibility("default")))
@@ -70,13 +70,14 @@ static int __send_to_sigkill(int pid)
 	return 0;
 }
 
-static int __check_launch_privilege(const char *pkg_name, const char *pkg_type, int pid)
+static int __check_launch_privilege(const char *pkg_name,
+		const char *pkg_type, int pid)
 {
 	GSList *iter = NULL;
 	GSList *iter2 = NULL;
 	ac_type_list_t *type_t;
 	ac_so_list_t *so_t;
-	
+
 	for (iter = pkg_type_list; iter != NULL; iter = g_slist_next(iter)) {
 		type_t = iter->data;
 		if (strncmp(type_t->pkg_type, pkg_type, MAX_PACKAGE_TYPE_SIZE) == 0) {
@@ -84,13 +85,13 @@ static int __check_launch_privilege(const char *pkg_name, const char *pkg_type, 
 				so_t = iter2->data;
 				_D("type : %s / so name : %s / func : %x", type_t->pkg_type, so_t->so_name, so_t->ac_check);
 				if (so_t->ac_check && so_t->ac_check(pkg_name) < 0) {
-					if(pid > 0)
-						__send_to_sigkill(pid);					
+					if (pid > 0)
+						__send_to_sigkill(pid);
 					return AC_R_ERROR;
 				}
 			}
 			return AC_R_OK;
-		}						
+		}
 	}
 
 	return AC_R_ENOPULUGINS;
@@ -103,18 +104,17 @@ static int __register_launch_privilege(const char *pkg_name, const char *pkg_typ
 	ac_type_list_t *type_t;
 	ac_so_list_t *so_t;
 	int ret = AC_R_OK;
-	
+
 	for (iter = pkg_type_list; iter != NULL; iter = g_slist_next(iter)) {
 		type_t = iter->data;
 		if (strncmp(type_t->pkg_type, pkg_type, MAX_PACKAGE_TYPE_SIZE) == 0) {
 			for (iter2 = type_t->so_list; iter2 != NULL; iter = g_slist_next(iter2)) {
 				so_t = iter2->data;
-				if (so_t->ac_register && so_t->ac_register(pkg_name) < 0) {
+				if (so_t->ac_register && so_t->ac_register(pkg_name) < 0)
 					ret = AC_R_ERROR;
-				}
 			}
 			return ret;
-		}						
+		}
 	}
 
 	return AC_R_ENOPULUGINS;
@@ -128,18 +128,17 @@ static int __unregister_launch_privilege(const char *pkg_name, const char *pkg_t
 	ac_type_list_t *type_t;
 	ac_so_list_t *so_t;
 	int ret = AC_R_OK;
-	
+
 	for (iter = pkg_type_list; iter != NULL; iter = g_slist_next(iter)) {
 		type_t = iter->data;
 		if (strncmp(type_t->pkg_type, pkg_type, MAX_PACKAGE_TYPE_SIZE) == 0) {
 			for (iter2 = type_t->so_list; iter2 != NULL; iter = g_slist_next(iter2)) {
 				so_t = iter2->data;
-				if (so_t->ac_unregister && so_t->ac_unregister(pkg_name) < 0) {
+				if (so_t->ac_unregister && so_t->ac_unregister(pkg_name) < 0)
 					ret = AC_R_ERROR;
-				}
 			}
 			return ret;
-		}						
+		}
 	}
 
 	return AC_R_ENOPULUGINS;;
@@ -170,22 +169,21 @@ static gboolean __ac_handler(gpointer data)
 	case AC_CHECK:
 		_send_result_to_server(clifd, AC_R_OK);
 		ret = __check_launch_privilege(ad->pkg_name, ad->pkg_type, ad->pid);
-		g_free(ad); 
+		g_free(ad);
 		free(pkt);
 		return TRUE;
 		break;
 	case AC_REGISTER:
 		ret = __register_launch_privilege(ad->pkg_name, ad->pkg_type);
-		break;		
+		break;
 	case AC_UNREGISTER:
 		ret = __unregister_launch_privilege(ad->pkg_name, ad->pkg_type);
-		break;		
+		break;
 	default:
 		_E("no support packet");
 	}
 
 	_send_result_to_server(clifd, ret);
-	
 	g_free(ad);
 	free(pkt);
 	return TRUE;
@@ -232,22 +230,21 @@ static void __pkt_type_list_free()
 	GSList *iter2 = NULL;
 	ac_type_list_t *type_t;
 	ac_so_list_t *so_t;
-	
+
 	for (iter = pkg_type_list; iter != NULL; iter = g_slist_next(iter)) {
 		type_t = iter->data;
-		if(type_t) {
+		if (type_t) {
 			for (iter2 = type_t->so_list; iter2 != NULL; iter2 = g_slist_next(iter2)) {
 				so_t = iter2->data;
-				if(so_t) {
-					if(so_t->so_name)
+				if (so_t) {
+					if (so_t->so_name)
 						free(so_t->so_name);
 					free(so_t);
 				}
 			}
 			g_slist_free(type_t->so_list);
-		
-		
-			if(type_t->pkg_type)
+
+			if (type_t->pkg_type)
 				free(type_t->pkg_type);
 			free(type_t);
 		}
@@ -279,9 +276,8 @@ int __initialize()
 	g_source_set_priority(src, G_PRIORITY_DEFAULT);
 
 	ret = g_source_attach(src, NULL);
-	if (ret == 0)
-	{
-		/* TODO: error handle*/
+	if (ret == 0) {
+		/* TODO: error handle */
 		return AC_R_ERROR;
 	}
 
@@ -296,23 +292,22 @@ int __initialize()
 	ac_type_list_t *type_t = NULL;
 	void *handle = NULL;
 	ac_so_list_t *so_t = NULL;
-	
+
 	dp = opendir(PLUGINS_PREFIX);
-	if (dp == NULL) {
+	if (dp == NULL)
 		return AC_R_ERROR;
-	}
+
 	while ((dentry = readdir(dp)) != NULL) {
-		
-		if(dentry->d_type != DT_DIR) 
+		if (dentry->d_type != DT_DIR)
 			continue;
-		if(strcmp(dentry->d_name,".") == 0 || strcmp(dentry->d_name,"..") == 0) 
+		if (strcmp(dentry->d_name, ".") == 0 || strcmp(dentry->d_name, "..") == 0)
 			continue;
-		
-		snprintf(buf,MAX_LOCAL_BUFSZ,"%s/%s",PLUGINS_PREFIX,dentry->d_name);
+
+		snprintf(buf, MAX_LOCAL_BUFSZ, "%s/%s", PLUGINS_PREFIX, dentry->d_name);
 		_D("type : %s", dentry->d_name);
 
 		type_t = malloc(sizeof(ac_type_list_t));
-		if(type_t == NULL) {
+		if (type_t == NULL) {
 			__pkt_type_list_free();
 			closedir(dp);
 			return AC_R_ERROR;
@@ -322,26 +317,25 @@ int __initialize()
 		type_t->so_list = NULL;
 
 		pkg_type_list = g_slist_append(pkg_type_list, (void *)type_t);
-		
+
 		sub_dp = opendir(buf);
 		if (sub_dp == NULL) {
 			__pkt_type_list_free();
 			closedir(dp);
 			return AC_R_ERROR;
 		}
-		
+
 		while ((sub_dentry = readdir(sub_dp)) != NULL) {
-			
-			if(sub_dentry->d_type == DT_DIR) 
+			if (sub_dentry->d_type == DT_DIR)
 				continue;
-			snprintf(buf2,MAX_LOCAL_BUFSZ,"%s/%s", buf, sub_dentry->d_name);
+			snprintf(buf2, MAX_LOCAL_BUFSZ, "%s/%s", buf, sub_dentry->d_name);
 			_D("so_name : %s", buf2);
-			
+
 			handle = dlopen(buf2, RTLD_LAZY);
-			if(handle == NULL) 
+			if (handle == NULL)
 				continue;
 			so_t = malloc(sizeof(ac_so_list_t));
-			if(so_t == NULL) {
+			if (so_t == NULL) {
 				__pkt_type_list_free();
 				dlclose(handle);
 				handle = NULL;
@@ -368,18 +362,17 @@ int __initialize()
 SLPAPI int ac_server_initialize()
 {
 	int ret = AC_R_OK;
-	
+
 	ret = __initialize();
-	
+
 	return ret;
 }
 
 SLPAPI int ac_server_check_launch_privilege(const char *pkg_name, const char *pkg_type, int pid)
 {
 	int ret = -1;
+
 	ret = __check_launch_privilege(pkg_name, pkg_type, pid);
 
 	return ret;
 }
-
-

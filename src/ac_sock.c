@@ -55,9 +55,9 @@ int _create_server_sock()
 	fd = socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
 	/*  support above version 2.6.27*/
 	if (fd < 0) {
-		if(errno == EINVAL) {
+		if (errno == EINVAL) {
 			fd = socket(AF_UNIX, SOCK_STREAM, 0);
-			if(fd < 0) {
+			if (fd < 0) {
 				_E("second chance - socket create error");
 				return -1;
 			}
@@ -69,9 +69,9 @@ int _create_server_sock()
 
 	memset(&saddr, 0, sizeof(saddr));
 	saddr.sun_family = AF_UNIX;
-	snprintf(saddr.sun_path, UNIX_PATH_MAX, "%s",AC_SOCK_NAME);
+	snprintf(saddr.sun_path, UNIX_PATH_MAX, "%s", AC_SOCK_NAME);
 	unlink(saddr.sun_path);
-	
+
 	if (bind(fd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0) {
 		_E("bind error");
 		close(fd);
@@ -91,7 +91,7 @@ int _create_server_sock()
 		_E("listen error");
 		close(fd);
 		return -1;
-	}	
+	}
 
 	return fd;
 }
@@ -103,7 +103,7 @@ int _create_client_sock()
 	int retry = 1;
 	int ret = -1;
 
-	fd = socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);	
+	fd = socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
 	/*  support above version 2.6.27*/
 	if (fd < 0) {
 		if (errno == EINVAL) {
@@ -158,8 +158,8 @@ static int __connect_client_sock(int fd, const struct sockaddr *saptr, socklen_t
 	error = 0;
 	if ((ret = connect(fd, (struct sockaddr *)saptr, salen)) < 0) {
 		if (errno != EAGAIN && errno != EINPROGRESS) {
-			fcntl(fd, F_SETFL, flags);	
-			return (-2);
+			fcntl(fd, F_SETFL, flags);
+			return -2;
 		}
 	}
 
@@ -173,28 +173,29 @@ static int __connect_client_sock(int fd, const struct sockaddr *saptr, socklen_t
 	timeout.tv_sec = 0;
 	timeout.tv_usec = nsec;
 
-	if ((ret = select(fd + 1, &readfds, &writefds, NULL, 
+	if ((ret = select(fd + 1, &readfds, &writefds, NULL,
 			nsec ? &timeout : NULL)) == 0) {
 		close(fd);	/* timeout */
 		errno = ETIMEDOUT;
-		return (-1);
+		return -1;
 	}
 
 	if (FD_ISSET(fd, &readfds) || FD_ISSET(fd, &writefds)) {
 		len = sizeof(error);
 		if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &error, &len) < 0)
-			return (-1);	/* Solaris pending error */
+			return -1;	/* Solaris pending error */
 	} else
-		return (-1);	/* select error: sockfd not set*/
+		return -1;	/* select error: sockfd not set*/
 
  done:
-	fcntl(fd, F_SETFL, flags);	
+	fcntl(fd, F_SETFL, flags);
 	if (error) {
-		close(fd);	
+		close(fd);
 		errno = error;
-		return (-1);
+		return -1;
 	}
-	return (0);
+
+	return 0;
 }
 
 /**
@@ -229,9 +230,8 @@ int _app_send_raw(int cmd, unsigned char *data, int datalen)
 
 	if ((len = send(fd, pkt, datalen + 8, 0)) != datalen + 8) {
 		_E("sendto() failed - %d %d", len, datalen + 8);
-		if (errno == EPIPE) {
+		if (errno == EPIPE)
 			_E("fd:%d\n", fd);
-		}
 		close(fd);
 		if (pkt) {
 			free(pkt);
@@ -285,7 +285,7 @@ ac_pkt_t *_app_recv_raw(int fd, int *clifd, struct ucred *cr)
 	}
 
 	pkt = (ac_pkt_t *) malloc(sizeof(char) * AC_SOCK_MAXBUFF);
-	if(pkt == NULL) {
+	if (pkt == NULL) {
 		close(*clifd);
 		return NULL;
 	}
@@ -296,9 +296,10 @@ ac_pkt_t *_app_recv_raw(int fd, int *clifd, struct ucred *cr)
  retry_recv:
 	/* receive single packet from socket */
 	len = recv(*clifd, pkt, AC_SOCK_MAXBUFF, 0);
-	if (len < 0)
+	if (len < 0) {
 		if (errno == EINTR)
 			goto retry_recv;
+	}
 
 	if ((len < 8) || (len != (pkt->len + 8))) {
 		_E("recv error %d %d", len, pkt->len);

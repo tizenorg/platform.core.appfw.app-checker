@@ -25,7 +25,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include <app-checker.h>
+#include "app-checker.h"
 #include "ac_sock.h"
 #include "internal.h"
 
@@ -74,7 +74,7 @@ SLPAPI int ac_check_launch_privilege(const char *appid, const char *pkg_type, in
 {
 	int ret = -1;
 
-	if(appid == NULL || pkg_type == NULL)
+	if (appid == NULL || pkg_type == NULL)
 		return AC_R_EINVAL;
 
 	ret = app_send_cmd(appid, pkg_type, pid, AC_CHECK);
@@ -86,7 +86,7 @@ SLPAPI int ac_register_launch_privilege(const char *pkg_name, const char *pkg_ty
 {
 	int ret = -1;
 
-	if(pkg_name == NULL || pkg_type == NULL)
+	if (pkg_name == NULL || pkg_type == NULL)
 		return AC_R_EINVAL;
 
 	ret = app_send_cmd(pkg_name, pkg_type, -1, AC_REGISTER);
@@ -98,11 +98,10 @@ SLPAPI int ac_unregister_launch_privilege(const char *pkg_name, const char *pkg_
 {
 	int ret = -1;
 
-	if(pkg_name == NULL || pkg_type == NULL)
+	if (pkg_name == NULL || pkg_type == NULL)
 		return AC_R_EINVAL;
 
 	ret = app_send_cmd(pkg_name, pkg_type, -1, AC_UNREGISTER);
 
-	return ret;	
+	return ret;
 }
-
