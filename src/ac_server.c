@@ -162,6 +162,10 @@ static gboolean __ac_handler(gpointer data)
 	}
 
 	ad = (struct ac_data *)g_base64_decode((const gchar*)pkt->data, (gsize *)&size);
+	if (ad == NULL) {
+		ret = -1;
+		goto ERROR;
+	}
 
 	_D("cmd : %d, pkgname : %s, pkgtype : %s", pkt->cmd, ad->pkg_name, ad->pkg_type);
 
@@ -182,10 +186,12 @@ static gboolean __ac_handler(gpointer data)
 	default:
 		_E("no support packet");
 	}
-
+ERROR:
 	_send_result_to_server(clifd, ret);
-	g_free(ad);
-	free(pkt);
+	if (ad)
+		g_free(ad);
+	if (pkt)
+		free(pkt);
 	return TRUE;
 }
 
@@ -263,10 +269,19 @@ int __initialize()
 	_D("app checker server initialize");
 
 	fd = _create_server_sock();
+	if (fd == -1) {
+		_E("_create_server_sock failed.");
+		return AC_R_ERROR;
+	}
 
 	src = g_source_new(&funcs, sizeof(GSource));
 
 	gpollfd = (GPollFD *) g_malloc(sizeof(GPollFD));
+	if (!gpollfd) {
+		g_source_unref(src);
+		close(fd);
+		return AC_R_ERROR;
+	}
 	gpollfd->events = POLLIN;
 	gpollfd->fd = fd;
 
