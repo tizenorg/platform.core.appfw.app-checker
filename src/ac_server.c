@@ -265,6 +265,17 @@ int __initialize()
 	GPollFD *gpollfd;
 	GSource *src;
 	int ret;
+	DIR *dp;
+	struct dirent dentry;
+	struct dirent *result = NULL;
+	DIR *sub_dp = NULL;
+	struct dirent sub_dentry;
+	struct dirent *sub_result = NULL;
+	char buf[MAX_LOCAL_BUFSZ];
+	char buf2[MAX_LOCAL_BUFSZ];
+	ac_type_list_t *type_t = NULL;
+	void *handle = NULL;
+	ac_so_list_t *so_t = NULL;
 
 	_D("app checker server initialize");
 
@@ -298,28 +309,20 @@ int __initialize()
 
 	g_source_unref(src);
 
-	DIR *dp;
-	struct dirent *dentry;
-	DIR *sub_dp = NULL;
-	struct dirent *sub_dentry;
-	char buf[MAX_LOCAL_BUFSZ];
-	char buf2[MAX_LOCAL_BUFSZ];
-	ac_type_list_t *type_t = NULL;
-	void *handle = NULL;
-	ac_so_list_t *so_t = NULL;
-
 	dp = opendir(PLUGINS_PREFIX);
 	if (dp == NULL)
 		return AC_R_ERROR;
 
-	while ((dentry = readdir(dp)) != NULL) {
-		if (dentry->d_type != DT_DIR)
+	while (readdir_r(dp, &dentry, &result) == 0 && result != NULL) {
+		if (dentry.d_type != DT_DIR)
 			continue;
-		if (strcmp(dentry->d_name, ".") == 0 || strcmp(dentry->d_name, "..") == 0)
+		if (strcmp(dentry.d_name, ".") == 0
+				|| strcmp(dentry.d_name, "..") == 0)
 			continue;
 
-		snprintf(buf, MAX_LOCAL_BUFSZ, "%s/%s", PLUGINS_PREFIX, dentry->d_name);
-		_D("type : %s", dentry->d_name);
+		snprintf(buf, MAX_LOCAL_BUFSZ, "%s/%s",
+				PLUGINS_PREFIX, dentry.d_name);
+		_D("type : %s", dentry.d_name);
 
 		type_t = malloc(sizeof(ac_type_list_t));
 		if (type_t == NULL) {
@@ -328,7 +331,7 @@ int __initialize()
 			return AC_R_ERROR;
 		}
 		memset(type_t, 0, sizeof(ac_type_list_t));
-		type_t->pkg_type = strdup(dentry->d_name);
+		type_t->pkg_type = strdup(dentry.d_name);
 		type_t->so_list = NULL;
 
 		pkg_type_list = g_slist_append(pkg_type_list, (void *)type_t);
@@ -340,10 +343,12 @@ int __initialize()
 			return AC_R_ERROR;
 		}
 
-		while ((sub_dentry = readdir(sub_dp)) != NULL) {
-			if (sub_dentry->d_type == DT_DIR)
+		while (readdir_r(sub_dp, &sub_dentry, &sub_result) == 0
+				&& sub_result != NULL) {
+			if (sub_dentry.d_type == DT_DIR)
 				continue;
-			snprintf(buf2, MAX_LOCAL_BUFSZ, "%s/%s", buf, sub_dentry->d_name);
+			snprintf(buf2, MAX_LOCAL_BUFSZ, "%s/%s",
+					buf, sub_dentry.d_name);
 			_D("so_name : %s", buf2);
 
 			handle = dlopen(buf2, RTLD_LAZY);
@@ -359,7 +364,7 @@ int __initialize()
 				return AC_R_ERROR;
 			}
 			memset(so_t, 0, sizeof(ac_so_list_t));
-			so_t->so_name = strdup(sub_dentry->d_name);
+			so_t->so_name = strdup(sub_dentry.d_name);
 			so_t->ac_check = dlsym(handle, "check_launch_privilege");
 			so_t->ac_register = dlsym(handle, "check_register_privilege");
 			so_t->ac_unregister = dlsym(handle, "check_unregister_privilege");
